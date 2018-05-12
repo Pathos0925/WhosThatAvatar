@@ -2,6 +2,8 @@
 Find and view public VRChat avatars
 
 ## How To Use
+Either: Download the source and run it in the editor, or compile it in Unity 5.6.3p1 for Standalone or WebGL, use the web app here: http://whosthatavatar.com, or download the compiled windows standalone player.
+
 Every avatar is identified with a unique ID, which usually starts with avtr_
 ### Load an avatar from an avatar ID
 Type the id in the search bar at the top of the application.
