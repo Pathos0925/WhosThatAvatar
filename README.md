@@ -2,10 +2,10 @@
 Find and view public VRChat avatars
 
 ## How To Use
-Either: 
-* Download the source and run it in the editor, or compile it in Unity 5.6.3p1 for Standalone or WebGL
-* Use the web app here: http://whosthatavatar.com (with limited compatability, see below)
-* Or download the compiled windows standalone player.
+EITHER: 
+* Download the source and run it in the editor (Recommended. Highest compatability), or compile it in Unity 5.6.3p1 for Standalone or WebGL
+* OR Use the web app here: http://whosthatavatar.com (with limited compatability, see below)
+* OR download the compiled windows standalone player.
 
 ### Controls
 * After loading avatar, Hold left mouse button and drag to rotate around the avatar.
