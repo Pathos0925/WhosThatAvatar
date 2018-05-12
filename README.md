@@ -10,4 +10,6 @@ To copy and paste in the web application, as WebGL does not support copy and pas
 
 ## FAQ
 ### Is this allowed?
-VRChat's stance, per Tupper on the VRChat discord: >Regarding reverse engineering our API - Our stance here is don't be malicious.  This is unsupported and it might break.
+VRChat's stance on public use of the VRChat API, per Tupper on the VRChat discord: 
+> *Regarding reverse engineering our API - Our stance here is don't be malicious.  This is unsupported and it might break.*
+
