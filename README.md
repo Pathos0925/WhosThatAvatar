@@ -24,4 +24,8 @@ To copy and paste in the web application, as WebGL does not support copy and pas
 ### Is this allowed?
 VRChat's stance on public use of the VRChat API, per Tupper on the VRChat discord: 
 > *Regarding reverse engineering our API - Our stance here is don't be malicious.  This is unsupported and it might break.*
+Along those lines, at preasent, only public avatars can be viewed. 
 
+### I dont want my avatar viewable
+Add an empty child gameobject to your avatar with the name "WTA_IGNORE".
+Instead of being viewed your avatar will give an error.
