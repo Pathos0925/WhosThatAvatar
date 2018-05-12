@@ -3,7 +3,7 @@ Find and view public VRChat avatars
 
 ## How To Use
 EITHER: 
-* Download the source and run it in the editor (Recommended. Highest compatability), or compile it in Unity 5.6.3p1 for Standalone or WebGL
+* Download the source (compatable with for Unity 5.6.3p1.) and run it in the Unity editor (Recommended. Highest compatability), or compile it for Standalone or WebGL.
 * OR Use the web app here: http://whosthatavatar.com (with limited compatability, see below)
 * OR download the compiled windows standalone player.
 
