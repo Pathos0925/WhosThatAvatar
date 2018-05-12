@@ -21,6 +21,7 @@ Type or paste this into the search bar at the top.
 
 ### Web App Limitation
 The Unity WebGL web application currently has the following restriction
+* Loading may take up to 8 seconds or more, depending on your browser and specs. Firefox seems to work the best.
 * Some avatars do not work for known and unknown reasons.
 * Limited custom shaders. Most shaders will be replaced with the standard shader (or whichever you select in the settings)
 * 6MB file limit. The CORS proxy cannot handle anything larger. (In actuality I think its more like ~4MB)
