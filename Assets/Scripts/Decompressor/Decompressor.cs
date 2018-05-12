@@ -7,6 +7,12 @@ using UtinyRipper.BundleFiles;
 using UnityEngine;
 using LZ4;
 
+//This is only needed for WebGL. Otherwise just use the assetbundle how you would any other.
+
+//Unity 5.5 and later does not support extracting an assetbundle compressed with LZMA in WebGL: https://blogs.unity3d.com/cn/2016/09/20/understanding-memory-in-unity-webgl/
+//What this does is extract it and update the metadata
+//it also flags the assetbundle as a WebGL assetbundle, instead of once for windows standalone
+
 namespace VRCAvatarAssetbundleDecompressor
 {
     public class Decompressor : MonoBehaviour

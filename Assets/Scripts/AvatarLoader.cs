@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define TEST_DECOMPRESS //comment this out in build. This is to test the WebGL decompressor.
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -16,9 +18,9 @@ public class AvatarLoader : MonoBehaviour
     private byte[] buff;
 
     //Unity 5.5 and later does not support extracting an assetbundle compressed with LZMA in WebGL: https://blogs.unity3d.com/cn/2016/09/20/understanding-memory-in-unity-webgl/
-    //this workaround was a headache. manually decompress and rebuild headers, blocks, and metadata. LZMA decompress block contents.
-    
-    // also, appearently unity wont open assetbundles built for another version, even if it is can.
+    //we have to manually decompress and rebuild blocks and metadata. LZMA decompress block contents.    
+    // also, appearently unity wont open assetbundles built for another version, even if it is can. 
+    //see Decompressor.Attempt for how this is done.
 
     private void Awake()
     {
@@ -215,10 +217,18 @@ public class AvatarLoader : MonoBehaviour
                     {
                         Debug.Log("Decompressing, client may hang...");
                         yield return new WaitForEndOfFrame();
-                        var decompressed = Decompressor.Attempt(www.downloadHandler.data);
+
+                        //This is only needed for WebGL. Otherwise just use the assetbundle how you would any other.
+                        var assetbundleData = www.downloadHandler.data;
+
+#if UNITY_WEBGL && !UNITY_EDITOR || TEST_DECOMPRESS
+                        assetbundleData = Decompressor.Attempt(www.downloadHandler.data);
+#else
+                        //assetbundleData = www.downloadHandler.data;
+#endif
                         Debug.Log("Loading assetbundle async...");
                         yield return new WaitForEndOfFrame();
-                        var request = AssetBundle.LoadFromMemoryAsync(decompressed);
+                        var request = AssetBundle.LoadFromMemoryAsync(assetbundleData);
                         yield return new WaitForEndOfFrame();
                         while (!request.isDone)
                         {

@@ -6375,10 +6375,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'WebGL limitations include: CORS API proxy. Non standard shaders may be
-    replaced. File size must be less than 6MB.
+  m_Text: 'WebGL has limited functionality.
 
-    For best results, try the open source windows client.'
+    For best results, use windows client.'
 --- !u!222 &894452005
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12346,7 +12345,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 98}
   m_SizeDelta: {x: 0, y: 98}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1935307348
