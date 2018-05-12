@@ -7,6 +7,15 @@ Either:
 * Use the web app here: http://whosthatavatar.com (with limited compatability, see below)
 * Or download the compiled windows standalone player.
 
+### Controls
+* After loading avatar, Hold left mouse button and drag to rotate around the avatar.
+* Hold right mouse button and drag to pan up and down.
+* Use the scroll wheel to zoom in and out.
+
+### Find and Browse Avatars
+* Press the "Find and Avatar" Button in the top right.
+* Currently only browsing is supported, but a search feature is planned soon.
+
 ### Web App Limitation
 The Unity WebGL web application currently has the following restriction
 * Some avatars do not work for known and unknown reasons.
