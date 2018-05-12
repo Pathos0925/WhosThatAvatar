@@ -1,0 +1,7 @@
+<linker>			 
+	 <assembly fullname="UnityEngine">
+		 
+		 <type fullname="UnityEngine.Avatar" preserve="all"/>
+		 
+	 </assembly>			 
+ </linker>
