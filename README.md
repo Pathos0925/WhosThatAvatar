@@ -3,15 +3,15 @@ Find and view public VRChat avatars
 
 ## How To Use
 Either: 
-⋅⋅* Download the source and run it in the editor, or compile it in Unity 5.6.3p1 for Standalone or WebGL
-⋅⋅* Use the web app here: http://whosthatavatar.com (with limited compatability, see below)
-⋅⋅* Or download the compiled windows standalone player.
+* Download the source and run it in the editor, or compile it in Unity 5.6.3p1 for Standalone or WebGL
+* Use the web app here: http://whosthatavatar.com (with limited compatability, see below)
+* Or download the compiled windows standalone player.
 
 ### Web App Limitation
 The Unity WebGL web application currently has the following restriction
-⋅⋅* Some avatars do not work for known and unknown reasons.
-⋅⋅* Limited custom shaders. Most shaders will be replaced with the standard shader (or whichever you select in the settings)
-⋅⋅* 6MB file limit. The CORS proxy cannot handle anything larger.
+* Some avatars do not work for known and unknown reasons.
+* Limited custom shaders. Most shaders will be replaced with the standard shader (or whichever you select in the settings)
+* 6MB file limit. The CORS proxy cannot handle anything larger. (In actuality I think its more like ~4MB)
 
 
 Every avatar is identified with a unique ID, which usually starts with avtr_
