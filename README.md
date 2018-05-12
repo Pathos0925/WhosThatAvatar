@@ -40,5 +40,5 @@ VRChat's stance on public use of the VRChat API, per Tupper on the VRChat discor
 Along those lines, at preasent, only public avatars can be viewed. 
 
 ### I dont want my avatar viewable
-Add an empty child gameobject to your avatar with the name: `WTA_IGNORE`
+* Add an empty child gameobject to your avatar with the name: `WTA_IGNORE`
 Instead of being viewed your avatar will give an error.
