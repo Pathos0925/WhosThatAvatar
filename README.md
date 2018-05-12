@@ -36,6 +36,7 @@ The Unity WebGL web application currently has the following restriction
 ### Is this allowed?
 VRChat's stance on public use of the VRChat API, per Tupper on the VRChat discord: 
 > *Regarding reverse engineering our API - Our stance here is don't be malicious.  This is unsupported and it might break.*
+
 Along those lines, at preasent, only public avatars can be viewed. 
 
 ### I dont want my avatar viewable
