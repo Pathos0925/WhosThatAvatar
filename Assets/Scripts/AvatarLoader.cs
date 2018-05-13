@@ -19,7 +19,7 @@ public class AvatarLoader : MonoBehaviour
 
     //Unity 5.5 and later does not support extracting an assetbundle compressed with LZMA in WebGL: https://blogs.unity3d.com/cn/2016/09/20/understanding-memory-in-unity-webgl/
     //we have to manually decompress and rebuild blocks and metadata. LZMA decompress block contents.    
-    // also, appearently unity wont open assetbundles built for another version, even if it is can. 
+    //also, appearently unity wont open assetbundles built for another version, even if is able to do so.
     //see Decompressor.Attempt for how this is done.
 
     private void Awake()
