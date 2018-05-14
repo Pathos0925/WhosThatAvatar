@@ -67,8 +67,6 @@ namespace VRCSDK2
             "UnityEngine.ParticleAnimator",
             "UnityEngine.MeshParticleEmitter",
             "UnityEngine.LineRenderer",
-            "VRC_StationInternal",
-            "VRCSDK2.VRC_Station",
             "VRCSDK2.VRC_IKFollower",
             "VRC_IKFollowerInternal"
         };

@@ -8,6 +8,8 @@ public class LoadingObject : MonoBehaviour
     private Text text;
     int index = 0;
     private float counter = 0f;
+    //public bool ShowStaticMessage = false;
+    public string StaticMessage = "";
 	// Use this for initialization
 	void Start ()
     {
@@ -18,23 +20,31 @@ public class LoadingObject : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        counter += Time.deltaTime;
-        if (counter >= 0.25f)
+        if (!string.IsNullOrEmpty(StaticMessage))
         {
-            counter = 0f;
-            index++;
-            text.text = "Loading";
-
-            if (index == 3)
+            text.text = StaticMessage;
+        }
+        else
+        {
+            counter += Time.deltaTime;
+            if (counter >= 0.25f)
             {
-                index = 0;
-            }
+                counter = 0f;
+                index++;
+                text.text = "Loading";
 
-            for (int i = 0; i < index; i++)
-            {
-                text.text += ".";
+                if (index == 3)
+                {
+                    index = 0;
+                }
+
+                for (int i = 0; i < index; i++)
+                {
+                    text.text += ".";
+                }
             }
         }
+        
     }
     
 }

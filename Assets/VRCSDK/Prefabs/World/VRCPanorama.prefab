@@ -1,0 +1,363 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &173772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 405174}
+  - component: {fileID: 3329914}
+  - component: {fileID: 2364512}
+  m_Layer: 0
+  m_Name: Sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &190396
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 496902}
+  - component: {fileID: 11445470}
+  - component: {fileID: 11423474}
+  - component: {fileID: 11445616}
+  - component: {fileID: 11481130}
+  - component: {fileID: 114332683634013616}
+  m_Layer: 0
+  m_Name: VRCPanorama
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &405174
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 173772}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_Children: []
+  m_Father: {fileID: 496902}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &496902
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190396}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 405174}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &2364512
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 173772}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 26803b57669325843a97b0ae43031082, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &3329914
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 173772}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11423474
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 762633, guid: f78c4655b33cb5741983dc02e08899cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkId: 500
+  SynchronizePhysics: 0
+  AllowCollisionTransfer: 0
+--- !u!114 &11445470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1628937948, guid: f78c4655b33cb5741983dc02e08899cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 2364512}
+  panoramas:
+  - url: 
+    texture: {fileID: 2800000, guid: b8e8dcca0b0b74a43acb6c803b119ea1, type: 3}
+  - url: 
+    texture: {fileID: 2800000, guid: 35ee2b4c3932605498ac766394b68f80, type: 3}
+--- !u!114 &11445616
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1777623079, guid: f78c4655b33cb5741983dc02e08899cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+  - name: display
+    mirror: 0
+    type: 2
+    serializeComponent: {fileID: 0}
+    valueBool: 0
+    valueInt: 0
+    valueFloat: 0
+    valueString: 
+    valueSerializedBytes: 
+    modified: 0
+    added: 0
+--- !u!114 &11481130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -339397700, guid: f78c4655b33cb5741983dc02e08899cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Events: []
+  CombinedNetworkId: -1
+  _dispatcher: {fileID: 0}
+  _registered: 0
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[2].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[2].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 5a0a5fa499f12144d9e11e045343bda9, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[3].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[3].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 2978f32f1fa249d4cad38e32e3228b34, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[4].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[4].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 8716307b13f94994ab0a994e731cff0c, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[5].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[5].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: caa492d2c5df90342baae8e2debcee63, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[6].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[6].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 8f8e9bf3067d80a44af0134b36b66155, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[7].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[7].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 9d249099318c5e54e9d22389e3b649e4, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[8].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[8].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 718af90330c34db47a98974d2f015e82, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[9].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[9].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 759b7ed4401d13d428feecfb7b2a5697, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[10].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[10].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: ab10d3af78533fa49badcec4415dc467, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[11].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[11].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 202ec380a9258a2428b8802774935540, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[12].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[12].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 2c82647e96280d24e82bd5b769ba1f8e, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[13].layout
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[13].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 1f449df65f3f1734c8ea52cfa0e81885, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[0].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: b8e8dcca0b0b74a43acb6c803b119ea1, type: 3}
+    - target: {fileID: 0}
+      propertyPath: panoramas.Array.data[1].texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 35ee2b4c3932605498ac766394b68f80, type: 3}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 190396}
+  m_IsPrefabParent: 1
+--- !u!114 &114332683634013616
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1579128511, guid: f78c4655b33cb5741983dc02e08899cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactTextPlacement: {fileID: 0}
+  interactText: Use
+  interactTextGO: {fileID: 0}
+  proximity: 2
+  isHidden: 0
+  UsesAdvancedOptions: 1
+  ShowHelp: 1
+  Triggers:
+  - TriggerType: 0
+    BroadcastType: 7
+    Events:
+    - Name: 
+      EventType: 14
+      ParameterString: NextPano
+      ParameterBoolOp: 0
+      ParameterBool: 0
+      ParameterFloat: 0
+      ParameterInt: 3
+      ParameterObject: {fileID: 0}
+      ParameterObjects:
+      - {fileID: 190396}
+      ParameterBytes: 
+    - Name: 
+      EventType: 14
+      ParameterString: PrevPano
+      ParameterBoolOp: 0
+      ParameterBool: 0
+      ParameterFloat: 0
+      ParameterInt: 3
+      ParameterObject: {fileID: 0}
+      ParameterObjects:
+      - {fileID: 190396}
+      ParameterBytes: 
+    Name: Unnamed
+    Others: []
+    Key: 0
+    TriggerIndividuals: 0
+    Layers:
+      serializedVersion: 2
+      m_Bits: 0
+    Repeat: 0
+    LowPeriodTime: 0
+    HighPeriodTime: 0
+    ResetOnEnable: 0
+    EventFired: 0
+    Duration: 0
+    Timer: 0
+    DataElementIdx: 0
+    DataStorageShadowValues:
+    - ParameterString: 
+      ParameterBoolOp: 
+      ParameterFloat: 
+      ParameterInt: 
+    - ParameterString: 
+      ParameterBoolOp: 
+      ParameterFloat: 
+      ParameterInt: 
+    ProbabilityLock: 
+    Probabilities: []

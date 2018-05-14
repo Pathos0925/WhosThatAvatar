@@ -1,0 +1,23 @@
+<html>
+<body>
+</body>
+</html>
+<script>
+    function OnReadyForJavascript(evt) {
+        var funcsPromise = engine.call("ListBindings");
+        funcsPromise.success(function (funs) {
+            var table = document.createElement("table");
+            funs.forEach(function (func) {
+                var row = document.createElement("tr");
+                table.appendChild(row);
+                var col = document.createElement("td");
+                col.innerHTML = func;
+                row.appendChild(col);
+            });
+            document.body.appendChild(table);
+        });
+    }
+
+    // Now listen for it
+    document.addEventListener('onBindingsReady', OnReadyForJavascript, false);
+</script>

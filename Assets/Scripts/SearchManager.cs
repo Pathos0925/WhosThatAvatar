@@ -44,6 +44,10 @@ public class SearchManager : MonoBehaviour
     private float resultsContentOriginalHeight = 100f;
     public bool IsActive = false;
 
+    private List<string> lastCachedSearchKeys = new List<string>();
+
+    private bool caughtReturn = false;
+
 
     // Use this for initialization
     void Start ()
@@ -106,27 +110,68 @@ public class SearchManager : MonoBehaviour
         {
             page -= 1;
             PageInput.text = page.ToString();
-            DoSearch(page);
+
+            if (UIManager.instance.UseCachedApi())
+            {
+                if (lastCachedSearchKeys.Count > 1)
+                {
+                    DoSearch(page, lastCachedSearchKeys[lastCachedSearchKeys.Count - 2]);
+                }
+                else
+                {
+                    DoSearch(page);
+                }
+            }
+            else
+            {
+                DoSearch(page);
+            }                
         }        
     }
     private void OnNextPageButton()
     {
         page += 1;
         PageInput.text = page.ToString();
-        DoSearch(page);
+
+        if (UIManager.instance.UseCachedApi())
+            DoSearch(page, lastCachedSearchKeys[lastCachedSearchKeys.Count - 1]);
+        else
+            DoSearch(page);
     }
     private void OnButtonSearch()
     {
         //Consider using a cooroutine
         page = int.Parse(PageInput.text);
+        lastCachedSearchKeys.Clear();
         DoSearch(page);
     }
 
-    private void DoSearch(int Page)
+    private void DoSearch(int Page, string key = "")
     {
+        loadingObject.StaticMessage = "";
         loadingObject.gameObject.SetActive(true);
         ClearResults();
-        StartCoroutine(VRCAPIHandler.GetAvatarsList(OnSearchResponse, (Page * 10), SearchInput.text, OrderDropdown.options[OrderDropdown.value].text, SortDropdown.options[SortDropdown.value].text, OnSearchError));
+
+        if (UIManager.instance.UseCachedApi())
+        {
+            StartCoroutine(CacheAPIHandler.GetCachedAvatars(GetCachedAvatarsResponse, SearchInput.text, key, OnSearchError));
+        }
+        else
+        {
+            StartCoroutine(VRCAPIHandler.GetAvatarsList((items) =>
+            {
+                OnSearchResponse(CacheAPIHandler.AvatarListToCachedList(items));
+            }, (Page * 10), SearchInput.text, OrderDropdown.options[OrderDropdown.value].text, SortDropdown.options[SortDropdown.value].text, OnSearchError));
+        }
+        
+    }
+
+    private void GetCachedAvatarsResponse(CacheAPIHandler.CachedAvatarResponse obj)
+    {
+        if (obj.LastEvaluatedKey != null && obj.LastEvaluatedKey.id != null)
+            lastCachedSearchKeys.Add(obj.LastEvaluatedKey.id);
+
+        OnSearchResponse(obj.Items);
     }
 
     private void OnSearchError(string obj)
@@ -143,15 +188,23 @@ public class SearchManager : MonoBehaviour
         avatarSearchGameobjects.Clear();
     }
 
-    private void OnSearchResponse(List<VRCAPIHandler.AvatarListItem> obj)
+    private void OnSearchResponse(List<CacheAPIHandler.CachedAvatar> list)
     {
-        loadingObject.gameObject.SetActive(false);
+        if (list.Count <= 0)
+        {
+            loadingObject.StaticMessage = "No Results";
+        }
+        else
+        {
+            loadingObject.gameObject.SetActive(false);
+        }
 
+        caughtReturn = false;
         ClearResults();
 
-        ResultsContent.sizeDelta = new Vector2(ResultsContent.sizeDelta.x, resultsContentOriginalHeight + (SearchResultLayout.GetComponent<RectTransform>().sizeDelta.y * obj.Count));
-        Debug.Log("Adding " + obj.Count + " items");
-        for (int i = 0; i < obj.Count; i++)
+        ResultsContent.sizeDelta = new Vector2(ResultsContent.sizeDelta.x, resultsContentOriginalHeight + (SearchResultLayout.GetComponent<RectTransform>().sizeDelta.y * list.Count));
+        Debug.Log("Adding " + list.Count + " items");
+        for (int i = 0; i < list.Count; i++)
         {
             var newResultGameobject = Instantiate(SearchResultLayout, ResultsContent);
             avatarSearchGameobjects.Add(newResultGameobject);
@@ -160,13 +213,16 @@ public class SearchManager : MonoBehaviour
             var rect = newResultGameobject.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, SearchResultLayout.GetComponent<RectTransform>().anchoredPosition.y - (i * rect.sizeDelta.y));
             if (DownloadImages.isOn)
-                StartCoroutine(SetThumbnailImage(obj[i].imageUrl, newResultGameobject.transform.Find("ThumbnailImage").GetComponent<RawImage>()));
-            newResultGameobject.transform.Find("NameText").GetComponent<Text>().text = obj[i].name + " by " + obj[i].authorName;
-            newResultGameobject.transform.Find("DescriptionText").GetComponent<Text>().text = obj[i].description;
+                StartCoroutine(SetThumbnailImage(list[i].imageUrl, newResultGameobject.transform.Find("ThumbnailImage").GetComponent<RawImage>()));
+            newResultGameobject.transform.Find("NameText").GetComponent<Text>().text = list[i].name + " by " + list[i].authorName;
+            newResultGameobject.transform.Find("DescriptionText").GetComponent<Text>().text = list[i].description;
             var locationText = newResultGameobject.transform.Find("LocationText").GetComponent<Text>();
-            locationText.text = "Getting location...";
-            StartCoroutine(SetLocation(obj[i].id, locationText));
-            string avatarId = obj[i].id;
+
+            if (list[i].worldsFound != null)
+                locationText.text = list[i].worldsFound.ToString();
+
+            //StartCoroutine(SetLocation(list[i].id, locationText));
+            string avatarId = list[i].id;
             newResultGameobject.transform.Find("LoadButton").GetComponent<Button>().onClick.AddListener(() =>
             {
                 Debug.Log("Load button, load avatar: " + avatarId);
@@ -225,8 +281,18 @@ public class SearchManager : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-		
-	}
+       
+    }
 
-    
+    private void OnGUI()
+    {
+        //appearently, .isFocused only works in OnGUI.
+        if (!caughtReturn && SearchInput.isFocused && SearchInput.text != "" && Input.GetKey(KeyCode.Return))
+        {
+            caughtReturn = true;
+            OnButtonSearch();
+        }
+    }
+
+
 }

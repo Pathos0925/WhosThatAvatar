@@ -1,0 +1,62 @@
+<html>
+    <head>
+	<title>VRChat Browser</title>
+	<style>
+	 body {
+	     
+	 }
+	 .navigateButton {
+	     width: 75px;
+	     height: 30px;
+	     float: left;
+	 }
+	 .toolbar {
+	     width: 100%;
+	     height: 5%;
+	 }
+	 .view iframe {
+	     width: 98%;
+	     height: 90%;
+	     frameborder: 0;
+	     padding: 1% 1% 1% 1%;
+	 }
+	 .toolbar span {
+	     display: block;
+	     overflow: hidden;
+	 }
+	 .toolbar #uriField {
+	     width: 100%;
+	     height: 28px;
+	     margin-top: 1px;
+	 }
+	</style>
+    </head>
+    <body>
+	<div class="toolbar">
+	    <input type="button" class="navigateButton" id="backButton" value="Back" onclick="historyBackward();"/>
+	    <input type="button" class="navigateButton" id="forwardButton" value="Forward" onclick="historyForward();"/>
+	    <input type="button" class="navigateButton" id="refreshButton" value="Refresh" onclick="browserRefresh();"/>
+	    <input type="button" class="navigateButton" id="goButton" value="Go!" onclick="loadURI();"/>
+            <span>
+		<input type="text" class="navigateUri" id="uriField" />
+	    </span>
+	</div>
+	<div class="view">
+	    <iframe id="mainView" src="https://www.archive.org" x-frame-options="SAMEORIGIN" ></iframe>
+	</div>
+	<script>
+	 function historyBackward() {
+	     window.frames[0].history.go(-1);
+	 }
+	 function historyForward() {
+	     window.frames[0].history.go(1);
+	 }
+	 function browserRefresh() {
+	     window.frames[0].location = window.frames[0].location;
+	 }
+	 function loadURI() {
+	     document.getElementById("mainView").src = document.getElementById("uriField").value;
+	 }
+	</script>
+    </body>
+</html>
