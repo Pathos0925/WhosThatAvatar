@@ -1,6 +1,6 @@
 # WhosThatAvatar
-Find and view public VRChat avatars.
-Find which worlds hold what avatars.
+* Find and view public VRChat avatars.
+* Find which worlds hold what avatars.
 
 ## How To Use
 EITHER: 
@@ -27,7 +27,7 @@ The Unity WebGL web application currently has the following restriction
 * Limited custom shaders. Most shaders will be replaced with the standard shader (or whichever you select in the settings)
 * 6MB file limit. The CORS proxy cannot handle anything larger. (In actuality I think its more like ~4MB)
 * No copy and paste. 
-#### To past an avatar ID into the web app, 
+#### To paste an avatar ID into the web app, 
   1. set the avatar querystring to the avatar ID you want to find. After "Avatar=" add the avatar ID. 
       E.g http://whosthatavatar.com/?avatar=avtr_63340186-53cb-46e3-9a60-419da084c794
 
@@ -52,5 +52,5 @@ The Cached API allows the following:
 * Finding avatar locations
 * Eases the load on VRChat's API
 
-It's a serverless stack built on AWS to scan and track public worlds and avatars.
-Updated worlds are scanned once per day for avatars and added to the cache.
+* It's a serverless stack built on AWS to scan and track public worlds and avatars.
+* Updated worlds are scanned once per day for avatars and added to the cache.
