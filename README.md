@@ -5,7 +5,7 @@
 ## How To Use
 EITHER: 
 * Download the source (compatable with Unity 5.6.3p1.) and run it in the Unity editor (Recommended. Highest compatability), or compile it for Standalone or WebGL.
-* OR Use the web app here: http://whosthatavatar.com (with limited compatability, see below)
+* OR Use the web app here: https://whosthatavatar.com (with limited compatability, see below)
 * OR download the compiled windows standalone player.
 
 ### Controls
