@@ -28,8 +28,8 @@ The Unity WebGL web application currently has the following restriction
 * 6MB file limit. The CORS proxy cannot handle anything larger. (In actuality I think its more like ~4MB)
 * No copy and paste. 
 #### To paste an avatar ID into the web app, 
-  1. set the avatar querystring to the avatar ID you want to find. After "Avatar=" add the avatar ID. 
-      E.g https://whosthatavatar.com/?avatar=avtr_e6b76bcf-ffab-45cc-85e2-c4ac1bd16e0f
+  ~~1. set the avatar querystring to the avatar ID you want to find. After "Avatar=" add the avatar ID. 
+      E.g https://whosthatavatar.com/?avatar=avtr_e6b76bcf-ffab-45cc-85e2-c4ac1bd16e0f~~
 
 
 
