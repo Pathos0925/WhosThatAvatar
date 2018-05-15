@@ -14,6 +14,7 @@ public class SearchManager : MonoBehaviour
 
     //search
     private InputField SearchInput;
+    private Toggle CachedApiToggle;
     private Toggle DownloadImages;
     private Dropdown SortDropdown;
     private Dropdown OrderDropdown;
@@ -69,6 +70,9 @@ public class SearchManager : MonoBehaviour
         });
         */
         SearchInput = GameObject.Find("SearchInput").GetComponent<InputField>();
+
+        CachedApiToggle = GameObject.Find("CachedApiToggle").GetComponent<Toggle>();
+        CachedApiToggle.onValueChanged.AddListener(UseCachedAPIChange);
         DownloadImages = GameObject.Find("DownloadImages").GetComponent<Toggle>();
         SortDropdown = GameObject.Find("SortDropdown").GetComponent<Dropdown>();
         OrderDropdown = GameObject.Find("OrderDropdown").GetComponent<Dropdown>();
@@ -99,6 +103,17 @@ public class SearchManager : MonoBehaviour
 
         SearchCanvas.SetActive(false);
     }
+
+    private void UseCachedAPIChange(bool arg0)
+    {
+        SearchInput.interactable = arg0;
+        SortDropdown.interactable = !arg0;
+        OrderDropdown.interactable = !arg0;
+        HasKnownLocationToggle.isOn = arg0;
+        PageInput.interactable = !arg0;
+        Debug.Log("Using CachedAPI: " + arg0);
+    }
+
     public void ResetPage()
     {
         page = 0;
@@ -111,7 +126,7 @@ public class SearchManager : MonoBehaviour
             page -= 1;
             PageInput.text = page.ToString();
 
-            if (UIManager.instance.UseCachedApi())
+            if (CachedApiToggle.isOn)
             {
                 if (lastCachedSearchKeys.Count > 1)
                 {
@@ -133,7 +148,7 @@ public class SearchManager : MonoBehaviour
         page += 1;
         PageInput.text = page.ToString();
 
-        if (UIManager.instance.UseCachedApi())
+        if (CachedApiToggle.isOn)
             DoSearch(page, lastCachedSearchKeys[lastCachedSearchKeys.Count - 1]);
         else
             DoSearch(page);
@@ -152,7 +167,7 @@ public class SearchManager : MonoBehaviour
         loadingObject.gameObject.SetActive(true);
         ClearResults();
 
-        if (UIManager.instance.UseCachedApi())
+        if (CachedApiToggle.isOn)
         {
             StartCoroutine(CacheAPIHandler.GetCachedAvatars(GetCachedAvatarsResponse, SearchInput.text, key, OnSearchError));
         }
@@ -190,9 +205,10 @@ public class SearchManager : MonoBehaviour
 
     private void OnSearchResponse(List<CacheAPIHandler.CachedAvatar> list)
     {
-        if (list.Count <= 0)
+        if (list == null || list.Count <= 0)
         {
             loadingObject.StaticMessage = "No Results";
+            return;
         }
         else
         {
@@ -212,16 +228,20 @@ public class SearchManager : MonoBehaviour
             newResultGameobject.SetActive(true);
             var rect = newResultGameobject.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, SearchResultLayout.GetComponent<RectTransform>().anchoredPosition.y - (i * rect.sizeDelta.y));
-            if (DownloadImages.isOn)
+
+            if (DownloadImages.isOn && !string.IsNullOrEmpty(list[i].imageUrl))
                 StartCoroutine(SetThumbnailImage(list[i].imageUrl, newResultGameobject.transform.Find("ThumbnailImage").GetComponent<RawImage>()));
+
             newResultGameobject.transform.Find("NameText").GetComponent<Text>().text = list[i].name + " by " + list[i].authorName;
             newResultGameobject.transform.Find("DescriptionText").GetComponent<Text>().text = list[i].description;
             var locationText = newResultGameobject.transform.Find("LocationText").GetComponent<Text>();
 
             if (list[i].worldsFound != null)
                 locationText.text = list[i].worldsFound.ToString();
+            else
+                locationText.text = "";
 
-            //StartCoroutine(SetLocation(list[i].id, locationText));
+
             string avatarId = list[i].id;
             newResultGameobject.transform.Find("LoadButton").GetComponent<Button>().onClick.AddListener(() =>
             {

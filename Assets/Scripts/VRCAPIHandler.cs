@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
 
 public class VRCAPIHandler : MonoBehaviour {
 
     //hardcoded apikey. Consider getting this from VRChats API instead
     public static string APIKEY = "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26";
 
-    // We cannot use VRChats native API as it doesn't have the required CORS headers. We have to use a CORS proxy.
+    // We cannot access VRChats native API directnly as it doesn't have the required CORS headers. We have to go through a CORS proxy first.
     //"To access cross-domain WWW resources in WebGL, the server you are trying to access needs to authorize this using CORS."
     //See: https://docs.unity3d.com/Manual/webgl-networking.html
     
@@ -49,7 +48,7 @@ public class VRCAPIHandler : MonoBehaviour {
     }
     public static string CheckProxyUrl(string url, bool forceFile = false)
     {
-        //force cors proxy if in WebGL, otherwise just use the native api
+        //force cors proxy if in WebGL, otherwise just access the api directly
 #if UNITY_WEBGL && !UNITY_EDITOR
         if (url.ToUpper().Contains("FILE") || forceFile)
         {
@@ -131,7 +130,7 @@ public class VRCAPIHandler : MonoBehaviour {
         public string id;
         public string assetUrl;
         public string unityVersion;
-        public int unitySortNumber;
+        public long unitySortNumber;
         public int assetVersion;
         public string platform;
         public string created_at;

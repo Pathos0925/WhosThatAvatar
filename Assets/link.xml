@@ -1,7 +1,14 @@
 <linker>			 
 	 <assembly fullname="UnityEngine">
 		 
-		 <type fullname="UnityEngine.Avatar" preserve="all"/>
+		 <type fullname="UnityEngine.AnimationClip" preserve="all"/> <!-- 74-->
+		 <type fullname="UnityEngine.FixedJoint" preserve="all"/><!-- 138-->
+		 <type fullname="UnityEngine.ParticleSystem" preserve="all"/><!-- 198-->
+		 <type fullname="UnityEngine.ParticleSystemRenderer" preserve="all"/><!-- 199-->
+		 
+		 <type fullname="UnityEngine.Avatar" preserve="all"/> <!-- 90-->
+		 <type fullname="UnityEngine.AnimatorController" preserve="all"/><!-- 91-->
+		 <type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all"/> <!-- 137-->
 		 
 	 </assembly>			 
  </linker>

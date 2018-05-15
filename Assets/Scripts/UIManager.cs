@@ -23,8 +23,7 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private Slider LightIntensitySlider;
     private Slider AmbientIntensitySlider;
     private Dropdown ReplacementShaderDropdown;
-
-    private Toggle CachedApiToggle;
+    
 
     //testing. delete later
     private InputField AvatarIdInputStreaming;
@@ -135,7 +134,6 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             SettingsManager.instance.SetReplacmentShader(value);
         });
 
-        CachedApiToggle = GameObject.Find("CachedApiToggle").GetComponent<Toggle>();
 
 
         SettingsPanel.SetActive(false);
@@ -160,11 +158,7 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }    
 #endif   
     }
-
-    public bool UseCachedApi()
-    {
-        return CachedApiToggle.isOn;
-    }
+    
 
     public void SetMainTitle(string avatarNameMainText = null, string avatarNameSubtitleText = null)
     {

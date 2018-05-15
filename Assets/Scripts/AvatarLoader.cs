@@ -1,4 +1,4 @@
-﻿#define TEST_DECOMPRESS //comment this out in build. This is to test the WebGL decompressor.
+﻿//#define TEST_DECOMPRESS //comment this out in build. This is to test the WebGL decompressor.
 
 using System;
 using System.Collections;
@@ -288,6 +288,14 @@ public class AvatarLoader : MonoBehaviour
         else
         {
             UIManager.instance.SetMainTitle(null, "Instantiating...");
+
+            if ((request.asset as GameObject).transform.FindChild("WTA_IGNORE") != null)
+            {
+                Debug.Log("found WTA_IGNORE. Aborting.");
+                UIManager.instance.SetMainTitle("Error", "This avatar is not public.");
+                request = null;
+                yield break;
+            }
 
             instantiatedAvatar = Instantiate(request.asset) as GameObject;
             instantiatedAvatar.transform.position = Vector3.zero;

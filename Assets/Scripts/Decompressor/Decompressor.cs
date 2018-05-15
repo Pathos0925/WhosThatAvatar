@@ -13,6 +13,12 @@ using LZ4;
 //What this does is extract it and update the metadata
 //it also flags the assetbundle as a WebGL assetbundle, instead of once for windows standalone
 
+//For more information, see:
+//https://github.com/mafaca/UtinyRipper
+//https://github.com/HearthSim/UnityPack/wiki/Format-Documentation
+//https://github.com/RaduMC/AssetStudio
+//https://github.com/ata4/disunity
+
 namespace VRCAvatarAssetbundleDecompressor
 {
     public class Decompressor : MonoBehaviour
