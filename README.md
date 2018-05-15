@@ -29,7 +29,7 @@ The Unity WebGL web application currently has the following restriction
 * No copy and paste. 
 #### To paste an avatar ID into the web app, 
   1. set the avatar querystring to the avatar ID you want to find. After "Avatar=" add the avatar ID. 
-      E.g https://whosthatavatar.com/?avatar=avtr_63340186-53cb-46e3-9a60-419da084c794
+      E.g https://whosthatavatar.com/?avatar=avtr_e6b76bcf-ffab-45cc-85e2-c4ac1bd16e0f
 
 
 
