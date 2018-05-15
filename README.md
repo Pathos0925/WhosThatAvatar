@@ -15,7 +15,7 @@ EITHER:
 
 ### Find and Browse Avatars
 * Press the "Find and Avatar" Button in the top right.
-* Currently only browsing is supported, but a search feature is planned soon.
+* Leave "Cached API" checked to search avatars with the worlds you can find them at. Uncheck to browse all avatars.
 #### Load an avatar from an avatar ID
 Every avatar is identified with a unique ID, which usually starts with avtr_.
 Type or paste this into the search bar at the top.
