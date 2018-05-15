@@ -46,6 +46,7 @@ Instead of being viewed your avatar will give an error.
 
 ### What is the Cached API?
 The Cached API allows the following:
+* Searching by Name, Author, or Description.
 * Faster search results
 * Finding avatar locations
 * Eases the load on VRChat's API
