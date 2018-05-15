@@ -43,3 +43,12 @@ Along those lines, at preasent, only public avatars can be viewed.
 ### I dont want my avatar viewable
 * Add an empty child gameobject to your avatar with the name: `WTA_IGNORE`
 Instead of being viewed your avatar will give an error.
+
+### What is the Cached API?
+The Cached API allows the following:
+* Faster search results
+* Finding avatar locations
+* Eases the load on VRChat's API
+
+It's a serverless stack built on AWS to scan and track public worlds and avatars.
+Updated worlds are scanned once per day for avatars and added to the cache.
