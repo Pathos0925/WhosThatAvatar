@@ -1,5 +1,6 @@
 # WhosThatAvatar
-Find and view public VRChat avatars
+Find and view public VRChat avatars.
+Find which worlds hold what avatars.
 
 ## How To Use
 EITHER: 
