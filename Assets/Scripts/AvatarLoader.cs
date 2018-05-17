@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using VRCAvatarAssetbundleDecompressor;
@@ -38,7 +39,6 @@ public class AvatarLoader : MonoBehaviour
 
     void Start ()
     {
-
     }
 
     private void CheckQuerystringParameters()
@@ -163,7 +163,21 @@ public class AvatarLoader : MonoBehaviour
         {
             Debug.Log(e.ToString());
         }
-        
+    }
+
+    private IEnumerator GetWebData(string url, Action<byte[]> response)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        {
+            www.Send();
+            Debug.Log("Downloading...");
+            while (!www.isDone && !abort)
+            {
+                UIManager.instance.SetMainLoadingBarProgress(www.downloadProgress);
+                yield return null;
+            }
+            response(www.downloadHandler.data);
+        }
     }
 
     public IEnumerator DownloadAvatar(string url, Action onDownloaded)
@@ -193,70 +207,76 @@ public class AvatarLoader : MonoBehaviour
             }
 
             UIManager.instance.SetMainTitle(null, "Downloading...");
-            
-            using (UnityWebRequest www = UnityWebRequest.Get(url))
-            {
-                www.Send();
-                Debug.Log("Downloading...");
-                while (!www.isDone && !abort)
-                {
-                    UIManager.instance.SetMainLoadingBarProgress(www.downloadProgress);
-                    //Debug.Log("Downloading " + www.downloadProgress);//comment this out in build
-                    yield return null;
-                }                
 
-                if (abort)
+            var downloaded = false;
+            byte[] data = null;
+            StartCoroutine(GetWebData(url,(resp)=>
                 {
-                    Debug.Log("Aborting from download...");
-                    UIManager.instance.SetMainLoadingBarProgress(1f);
-                    UIManager.instance.SetMainTitle("", "Cancelled");
-                }
-                else
+                    data = resp;
+            }));            
+            while (data == null && !abort)
+            {               
+                yield return null;
+            }
+            Debug.Log("File downloaded");
+            if (abort)
+            {
+                Debug.Log("Aborting from download...");
+                UIManager.instance.SetMainLoadingBarProgress(1f);
+                UIManager.instance.SetMainTitle("", "Cancelled");
+            }
+            else
+            {
+                if (data.Length < 200)
                 {
-                    if (www.downloadHandler.data.Length < 200 && www.downloadHandler.data[0] != 0x55)
+                    var dataString = Encoding.UTF8.GetString(data);
+                    Debug.Log(dataString);
+                    if (dataString.StartsWith("https"))
                     {
-                        Debug.Log(www.downloadHandler.text);
-                        var errorResponse = JsonUtility.FromJson<error>(www.downloadHandler.text);
-                        if (errorResponse!= null && errorResponse.message != null)
+                        Debug.Log("File was redirected.");
+                        data = null;
+                        StartCoroutine(GetWebData(dataString, (resp) =>
                         {
-                            if (errorResponse.message == "Too large")
-                            {
-                                UIManager.instance.SetMainTitle("Error", "File is too large. Use the standalone client to view it.");
-                                errorShown = true;
-                            }
-                            else
-                            {
-                                UIManager.instance.SetMainTitle("Error", "API Error. File may be too large.");
-                                errorShown = true;
-                            }
+                            data = resp;
+                        }));
+                        while (data == null && !abort)
+                        {
+                            yield return null;
                         }
+
                     }
                     else
                     {
-                        Debug.Log("Decompressing, client may hang...");
-                        yield return new WaitForEndOfFrame();
+                        UIManager.instance.SetMainTitle("Error", "API Error. File may be too large.");
+                        errorShown = true;
+                    }
+                }
 
-                        //This is only needed for WebGL. Otherwise just use the assetbundle how you would any other.
-                        var assetbundleData = www.downloadHandler.data;
+                if (data.Length >= 200)
+                {
+                    Debug.Log("Decompressing, client may hang...");
+                    yield return new WaitForEndOfFrame();
+
+                    //This is only needed for WebGL. Otherwise just use the assetbundle how you would any other.
+                    byte[] assetbundleData = null;
 
 #if UNITY_WEBGL && !UNITY_EDITOR || TEST_DECOMPRESS
-                        assetbundleData = Decompressor.Attempt(www.downloadHandler.data);
+                    assetbundleData = Decompressor.Attempt(data);
 #else
-                        //assetbundleData = www.downloadHandler.data;
+                    assetbundleData = data;
 #endif
-                        Debug.Log("Loading assetbundle async...");
+                    Debug.Log("Loading assetbundle async...");
+                    yield return new WaitForEndOfFrame();
+                    var request = AssetBundle.LoadFromMemoryAsync(assetbundleData);
+                    yield return new WaitForEndOfFrame();
+                    while (!request.isDone)
+                    {
                         yield return new WaitForEndOfFrame();
-                        var request = AssetBundle.LoadFromMemoryAsync(assetbundleData);
-                        yield return new WaitForEndOfFrame();
-                        while (!request.isDone)
-                        {
-                            yield return new WaitForEndOfFrame();
-                        }
-                        loadedAssetBundle = request.assetBundle;
-                        success = true;
-                    }                    
+                    }
+                    loadedAssetBundle = request.assetBundle;
+                    success = true;
                 }
-            }                 
+            }
         }
         finally
         {

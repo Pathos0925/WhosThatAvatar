@@ -15,7 +15,11 @@ public class WebpageUtilities : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void SetParamReplace(string str);
 
-   
+
+    [DllImport("__Internal")]
+    private static extern void FinishLoading();
+
+
 
     public static string GetURLParameters()
     {
@@ -55,8 +59,21 @@ public class WebpageUtilities : MonoBehaviour
 
             }
         }
-        
+
     }
-    
+
+
+    private void Start()
+    {
+        try
+        {
+            FinishLoading();
+        }
+        catch
+        {
+
+        }
+    }
+
 
 }

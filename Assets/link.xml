@@ -20,6 +20,8 @@
 		 <type fullname="UnityEngine.AudioSource" preserve="all"/><!-- 240-->
 		 
 		 <type fullname="UnityEngine.Cloth" preserve="all"/><!-- 240-->
+		 <type fullname="UnityEngine.SphereCollider" preserve="all"/><!-- 135-->
+		 <type fullname="UnityEngine.TrailRenderer" preserve="all"/><!-- 96-->
 		 
 		 
 	 </assembly>			 

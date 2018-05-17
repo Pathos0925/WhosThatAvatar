@@ -18,8 +18,8 @@ public class VRCAPIHandler : MonoBehaviour {
     public static string VRCHAT_API = "https://api.vrchat.cloud/api/1/";
 
     public static string PROXY_API = "https://li4f8b2mw7.execute-api.us-east-2.amazonaws.com/CORS-proxy-json/";
-    public static string PROXY_FILE_API = "https://fx5zpl3dmh.execute-api.us-east-2.amazonaws.com/CORS-proxy-bin/"; //returns only binary data. capped at around 4 to 6 MB.
-   
+    // public static string PROXY_FILE_API = "https://fx5zpl3dmh.execute-api.us-east-2.amazonaws.com/CORS-proxy-bin/"; //returns only binary data. capped at around 4 to 6 MB.
+    public static string PROXY_FILE_API = "https://fx5zpl3dmh.execute-api.us-east-2.amazonaws.com/alpha/";
     public static IEnumerator GetAvatarInfo(string avatarId, Action<AvatarInfo> response, Action<string> onError = null)
     {        
         try
