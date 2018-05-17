@@ -1,14 +1,26 @@
 <linker>			 
 	 <assembly fullname="UnityEngine">
-		 
-		 <type fullname="UnityEngine.AnimationClip" preserve="all"/> <!-- 74-->
+	 
+		 <type fullname="UnityEngine.AnimationClip" preserve="all"/> <!-- 74-->		 
 		 <type fullname="UnityEngine.FixedJoint" preserve="all"/><!-- 138-->
 		 <type fullname="UnityEngine.ParticleSystem" preserve="all"/><!-- 198-->
-		 <type fullname="UnityEngine.ParticleSystemRenderer" preserve="all"/><!-- 199-->
+		 <type fullname="UnityEngine.ParticleSystemRenderer" preserve="all"/><!-- 199-->	
 		 
 		 <type fullname="UnityEngine.Avatar" preserve="all"/> <!-- 90-->
 		 <type fullname="UnityEngine.AnimatorController" preserve="all"/><!-- 91-->
 		 <type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all"/> <!-- 137-->
+				 
+		 <type fullname="UnityEngine.MeshCollider" preserve="all"/> <!-- 64-->
+		 <type fullname="UnityEngine.AnimatorOverrideController" preserve="all"/><!-- 221-->	
+		 
+		 <type fullname="UnityEngine.Animation" preserve="all"/><!-- 111-->		 
+		 <type fullname="UnityEngine.AudioMixerGroup" preserve="all"/><!-- 273-->		 
+		 <type fullname="UnityEngine.AudioMixerSnapshot" preserve="all"/><!-- 272-->	
+		 <type fullname="UnityEngine.AudioMixer" preserve="all"/><!-- 240-->	
+		 <type fullname="UnityEngine.AudioSource" preserve="all"/><!-- 240-->
+		 
+		 <type fullname="UnityEngine.Cloth" preserve="all"/><!-- 240-->
+		 
 		 
 	 </assembly>			 
  </linker>

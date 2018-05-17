@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define TEST_PROXY
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,7 +51,7 @@ public class VRCAPIHandler : MonoBehaviour {
     public static string CheckProxyUrl(string url, bool forceFile = false)
     {
         //force cors proxy if in WebGL, otherwise just access the api directly
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR || TEST_PROXY
         if (url.ToUpper().Contains("FILE") || forceFile)
         {
             return url.Replace(VRCHAT_API, PROXY_FILE_API);

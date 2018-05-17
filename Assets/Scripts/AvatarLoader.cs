@@ -45,9 +45,9 @@ public class AvatarLoader : MonoBehaviour
     {
         var avatarQuerystring = "";
 #if UNITY_WEBGL && !UNITY_EDITOR
-        var avatarQuerystring = WebpageUtilities.GetURLParameters();
+        avatarQuerystring = WebpageUtilities.GetURLParameters();
 #elif TEST_LOAD_ON_START
-        var avatarQuerystring = "avtr_53411a6e-8b3a-486e-983a-9249d7b6a087";
+        avatarQuerystring = "avtr_53411a6e-8b3a-486e-983a-9249d7b6a087";
 #endif
         if (!string.IsNullOrEmpty(avatarQuerystring))
         {
@@ -141,7 +141,9 @@ public class AvatarLoader : MonoBehaviour
                         UIManager.instance.SetLoadedAvatarId(avatarInfo.id);
 
                         GameObject mouseOrbitFollow = new GameObject("MouseOrbitFollow");
-                        mouseOrbitFollow.transform.position = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
+                        //mouseOrbitFollow.transform.position = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
+                        mouseOrbitFollow.transform.position = Vector3.zero;
+
                         mouseOrbit.target = mouseOrbitFollow.transform;
                         if (avatarInfo.name == null)
                             avatarInfo.name = "";
@@ -224,7 +226,7 @@ public class AvatarLoader : MonoBehaviour
                             }
                             else
                             {
-                                UIManager.instance.SetMainTitle("Error", "API Error. Does the file still exist?");
+                                UIManager.instance.SetMainTitle("Error", "API Error. File may be too large.");
                                 errorShown = true;
                             }
                         }
@@ -315,6 +317,9 @@ public class AvatarLoader : MonoBehaviour
 
             instantiatedAvatar = Instantiate(request.asset) as GameObject;
             instantiatedAvatar.transform.position = Vector3.zero;
+
+            var bounds = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
+            instantiatedAvatar.transform.position = new Vector3(bounds.x, instantiatedAvatar.transform.position.y, bounds.z);
 
             //WebGL has issues with alot of shaders.
 #if UNITY_WEBGL && !UNITY_EDITOR

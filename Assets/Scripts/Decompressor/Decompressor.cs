@@ -51,11 +51,12 @@ namespace VRCAvatarAssetbundleDecompressor
                     UInt32 blockDecompressedSize;
                     UInt32 blockCompressedSize;
                     BundleFlag blockFlags;
+                    List<MetadataInfo> metadataList = new List<MetadataInfo>();
                     Int32 metaDataCount;
-                    Int64 mdoffset;
-                    Int64 mdsize;
-                    Int32 mdblobindex;
-                    string mdname;
+                    //Int64 mdoffset;
+                    //Int64 mdsize;
+                    //Int32 mdblobindex;
+                    //string mdname;
 
                     using (MemoryStream memStream = new MemoryStream(MetadataDecompressedSize))
                     {
@@ -95,10 +96,16 @@ namespace VRCAvatarAssetbundleDecompressor
                             blockFlags = (BundleFlag)metadataReader.ReadUInt16BE();
 
                             metaDataCount = metadataReader.ReadInt32BE();//1
-                            mdoffset = metadataReader.ReadInt64BE();//0
-                            mdsize = metadataReader.ReadInt64BE();
-                            mdblobindex = metadataReader.ReadInt32BE();//4
-                            mdname = metadataReader.ReadZeroedString();//guid
+                            for (int i = 0; i < metaDataCount; i++)
+                            {
+                                var newInfo = new MetadataInfo();
+                                newInfo.offset = metadataReader.ReadInt64BE();//0
+                                newInfo.size = metadataReader.ReadInt64BE();
+                                newInfo.blobIndex = metadataReader.ReadInt32BE();//4
+                                newInfo.name = metadataReader.ReadZeroedString();//guid
+                                metadataList.Add(newInfo);
+                            }
+                            
                         }
                     }
 
@@ -136,10 +143,14 @@ namespace VRCAvatarAssetbundleDecompressor
                                     mdwriter.Write(blockDecompressedSize);
                                     mdwriter.Write((UInt16)blockFlags);
                                     mdwriter.Write((Int32)metaDataCount);//metadata count //should be 1
-                                    mdwriter.Write(mdoffset);
-                                    mdwriter.Write(mdsize);
-                                    mdwriter.Write(mdblobindex);
-                                    mdwriter.WriteZeroedString(mdname);
+                                    for (int i = 0; i < metaDataCount; i++)
+                                    {
+                                        mdwriter.Write(metadataList[i].offset);
+                                        mdwriter.Write(metadataList[i].size);
+                                        mdwriter.Write(metadataList[i].blobIndex);
+                                        mdwriter.WriteZeroedString(metadataList[i].name);
+                                    }
+  
 
                                     mdStreamWriter.Position = 0;
 
@@ -258,7 +269,15 @@ namespace VRCAvatarAssetbundleDecompressor
         
     }
 
+    public struct MetadataInfo
+    {
+        public Int64 offset;
+        public Int64 size;
+        public Int32 blobIndex;
+        public string name;
+    }
 
+   
 
     public static class BEHelpers
     {
