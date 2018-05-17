@@ -54,4 +54,4 @@ The Cached API allows the following:
 
 * Only public avatars that can be found in a public world are added to the cache. At preasent there are about +2100 indexed avatars.
 * It's a serverless stack built on AWS to scan and track public worlds and avatars.
-* Updated worlds are scanned periodically avatars and added to the cache.
+* Updated worlds are scanned periodically for avatars and added to the cache.
