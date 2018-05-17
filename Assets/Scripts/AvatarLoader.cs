@@ -1,4 +1,5 @@
-﻿//#define TEST_DECOMPRESS //comment this out in build. This is to test the WebGL decompressor.
+﻿#define TEST_DECOMPRESS //comment this out in build. This is to test the WebGL decompressor.
+//#define TEST_LOAD_ON_START
 
 using System;
 using System.Collections;
@@ -16,6 +17,8 @@ public class AvatarLoader : MonoBehaviour
     private MouseOrbitImproved mouseOrbit;
     bool abort = false;
     private byte[] buff;
+
+    private bool CheckedQuerstring = false;
 
     //Unity 5.5 and later does not support extracting an assetbundle compressed with LZMA in WebGL: https://blogs.unity3d.com/cn/2016/09/20/understanding-memory-in-unity-webgl/
     //we have to manually decompress and rebuild blocks and metadata. LZMA decompress block contents.    
@@ -35,16 +38,21 @@ public class AvatarLoader : MonoBehaviour
 
     void Start ()
     {
-        //LoadAvatar("avtr_88723b40-92a1-4d6c-b867-9072f027f680");
 
+    }
+
+    private void CheckQuerystringParameters()
+    {
+        var avatarQuerystring = "";
 #if UNITY_WEBGL && !UNITY_EDITOR
         var avatarQuerystring = WebpageUtilities.GetURLParameters();
+#elif TEST_LOAD_ON_START
+        var avatarQuerystring = "avtr_53411a6e-8b3a-486e-983a-9249d7b6a087";
+#endif
         if (!string.IsNullOrEmpty(avatarQuerystring))
         {
             LoadAvatar(avatarQuerystring);
         }
-#endif       
-       
     }
 
     void PrintOrReplaceShaders(GameObject go, bool shared = false, bool replace = false)
@@ -102,50 +110,58 @@ public class AvatarLoader : MonoBehaviour
     }
     void Update ()
     {
-		if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (!CheckedQuerstring && Time.timeSinceLevelLoad > 0.5f)
         {
-            if (instantiatedAvatar)
-                PrintOrReplaceShaders(instantiatedAvatar);
-        }       
+            CheckedQuerstring = true;
+            CheckQuerystringParameters();
+        }  
     }
 
     public void LoadAvatar(string avatarID)
     {
         //todo: Disable ui?
         //todo: cancel button
-        UIManager.instance.SetMainTitle("Loading avatar", "Getting avatar info...");
-        StartCoroutine(VRCAPIHandler.GetAvatarInfo(avatarID, (avatarInfo) =>
+        try
         {
-            if (avatarInfo.releaseStatus != "public")
+            UIManager.instance.SetMainTitle("Loading avatar", "Getting avatar info...");
+            StartCoroutine(VRCAPIHandler.GetAvatarInfo(avatarID, (avatarInfo) =>
             {
-                UIManager.instance.SetMainTitle(null, "This avatar is not public and cannot be viewed.");
-                return;
-            }
-
-            UIManager.instance.SetMainTitle(avatarInfo.name, "By: " + avatarInfo.authorName);
-            StartCoroutine(DownloadAvatar(VRCAPIHandler.CheckProxyUrl(avatarInfo.assetUrl), () =>
-            {
-                StartCoroutine(InstantiateAvatar(() =>
+                if (avatarInfo.releaseStatus != "public")
                 {
-                    UIManager.instance.SetMainTitle(avatarInfo.name, "By: " + avatarInfo.authorName);
-                    UIManager.instance.SetLoadedAvatarId(avatarInfo.id);
+                    UIManager.instance.SetMainTitle(null, "This avatar is not public and cannot be viewed.");
+                    return;
+                }
 
-                    GameObject mouseOrbitFollow = new GameObject("MouseOrbitFollow");
-                    mouseOrbitFollow.transform.position = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
-                    mouseOrbit.target = mouseOrbitFollow.transform;
-                    if (avatarInfo.name == null)
-                        avatarInfo.name = "";
-                    if (avatarInfo.authorName == null)
-                        avatarInfo.authorName = "?";
+                UIManager.instance.SetMainTitle(avatarInfo.name, "By: " + avatarInfo.authorName);
+                StartCoroutine(DownloadAvatar(VRCAPIHandler.CheckProxyUrl(avatarInfo.assetUrl), () =>
+                {
+                    StartCoroutine(InstantiateAvatar(() =>
+                    {
+                        UIManager.instance.SetMainTitle(avatarInfo.name, "By: " + avatarInfo.authorName);
+                        UIManager.instance.SetLoadedAvatarId(avatarInfo.id);
 
-                    WebpageUtilities.SetURLParameters(avatarInfo.id);
-                    //todo: enable UI
+                        GameObject mouseOrbitFollow = new GameObject("MouseOrbitFollow");
+                        mouseOrbitFollow.transform.position = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
+                        mouseOrbit.target = mouseOrbitFollow.transform;
+                        if (avatarInfo.name == null)
+                            avatarInfo.name = "";
+                        if (avatarInfo.authorName == null)
+                            avatarInfo.authorName = "?";
+
+                        WebpageUtilities.SetURLParameters(avatarInfo.id);
+                        //todo: enable UI
+                    }));
                 }));
+            }, (error) =>
+            {
+                UIManager.instance.SetMainTitle(null, "Could not find that avatar");
             }));
-        }, (error) =>
+        }
+        catch(Exception e)
         {
-            UIManager.instance.SetMainTitle(null, "Could not find that avatar");
-        }));
+            Debug.Log(e.ToString());
+        }
+        
     }
 
     public IEnumerator DownloadAvatar(string url, Action onDownloaded)

@@ -11705,7 +11705,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 25682081c142fe041ac4e3cf9a487857, type: 2}
   ReplacementShaders:
   - {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 4800000, guid: 645ddb695a089034b803c929e740378f, type: 3}
+  - {fileID: 4800000, guid: b55dd15a43b2c9349a4b41158b1387a4, type: 3}
   - {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 4800000, guid: 11c9bbfff15b22945a69793c9a33865f, type: 3}
 --- !u!114 &1832699019
@@ -12206,7 +12206,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 98}
   m_SizeDelta: {x: 0, y: 98}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1935307348

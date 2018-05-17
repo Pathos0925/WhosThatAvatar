@@ -23,7 +23,6 @@ var QueryHandler = {
         
     },
     SetParam: function(param){
-        //window.location.search = "?avatar=" + Pointer_stringify(param) // this forces the browser to navigate, and reloads the game
 		history.pushState({}, "Avatar", "?avatar=" + Pointer_stringify(param));
     },
 	SetParamReplace: function(param){

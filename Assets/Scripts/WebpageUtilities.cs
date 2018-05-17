@@ -15,18 +15,15 @@ public class WebpageUtilities : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void SetParamReplace(string str);
 
-    //external textbox to allow copy and pasting avatar ids
-    [DllImport("__Internal")]
-    private static extern void ShowOverlay(string exportedGameSave);
-
-    [DllImport("__Internal")]
-    private static extern void HideOverlay();
+   
 
     public static string GetURLParameters()
     {
         try
         {
-            return GetParam();
+            string param = GetParam();
+            Debug.Log("Found querystring avatar: " + param);
+            return param;
         }
         catch
         {
@@ -60,32 +57,6 @@ public class WebpageUtilities : MonoBehaviour
         }
         
     }
-
-    public static void ShowImportExportOverlay(string gameSave)
-    {
-        ShowOverlay(gameSave);
-        ToggleCaptureAllInput(false);
-    }
-
-    public static void ImportFromWebOverlay(string importStr)
-    {
-        HideOverlay();
-        UIManager.instance.SetLoadedAvatarId(importStr);
-        //LoadGameFromImportedString(importStr);
-        ToggleCaptureAllInput(true);
-    }
-
-    public static void CloseOverlay(string param)
-    {
-        HideOverlay();
-        ToggleCaptureAllInput(true);
-    }
-
-    public static void ToggleCaptureAllInput(bool captureAll)
-    {
-#if !UNITY_EDITOR && UNITY_WEBGL
-        WebGLInput.captureAllKeyboardInput = captureAll;
-#endif
-    }
+    
 
 }

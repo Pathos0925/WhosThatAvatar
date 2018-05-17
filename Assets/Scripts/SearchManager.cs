@@ -102,6 +102,8 @@ public class SearchManager : MonoBehaviour
         SearchResultLayout.SetActive(false);
 
         SearchCanvas.SetActive(false);
+        CachedApiToggle.isOn = false;
+        UseCachedAPIChange(false);
     }
 
     private void UseCachedAPIChange(bool arg0)
