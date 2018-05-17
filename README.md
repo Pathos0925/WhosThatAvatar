@@ -52,5 +52,6 @@ The Cached API allows the following:
 * Finding avatar locations
 * Eases the load on VRChat's API
 
+* Only public avatars that can be found in a public world are added to the cache. At preasent there are about +2100 indexed avatars.
 * It's a serverless stack built on AWS to scan and track public worlds and avatars.
 * Updated worlds are scanned once per day for avatars and added to the cache.
