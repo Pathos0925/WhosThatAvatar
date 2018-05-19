@@ -1,6 +1,6 @@
 # WhosThatAvatar
 * Find and view public VRChat avatars.
-* Search public worlds for avatar by name or author. (Experimental)
+* Search public worlds for avatars by name, author, or description. (Experimental)
 
 ## How To Use
 EITHER: 
