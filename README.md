@@ -1,6 +1,6 @@
 # WhosThatAvatar
 * Find and view public VRChat avatars.
-* Find which worlds hold what avatars.
+* Search public worlds for avatar by name or author. (Experimental)
 
 ## How To Use
 EITHER: 
@@ -45,13 +45,13 @@ Along those lines, at preasent, only public avatars can be viewed.
 * Add an empty child gameobject to your avatar with the name: `WTA_IGNORE`
 Instead of being viewed your avatar will give an error.
 
-### What is the Cached API?
-The Cached API allows the following:
+### How does the search work?
+Searching uses a cached DB of scanned worlds and allows:
 * Searching by Name, Author, or Description.
 * Faster search results
 * Finding avatar locations
 * Eases the load on VRChat's API
 
-* Only public avatars that can be found in a public world are added to the cache. At preasent there are about +2100 indexed avatars.
+* Only public avatars that can be found in a public world are added to the cache. At preasent there are about +8000 indexed avatars.
 * It's a serverless stack built on AWS to scan and track public worlds and avatars.
 * Updated worlds are scanned periodically for avatars and added to the cache.
