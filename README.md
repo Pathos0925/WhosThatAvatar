@@ -21,7 +21,7 @@ Every avatar is identified with a unique ID, which usually starts with avtr_.
 Type or paste this into the search bar at the top.
 
 ### Web App Limitation
-The Unity WebGL web application currently has the following restriction
+The Unity WebGL web application currently has the following restrictions:
 * Limited shaders. Most shaders will be replaced with the standard shader.
 * API requests are sent through a CORS proxy as VRChat's API does not include CORS headers. 
   * More information here:  https://docs.unity3d.com/560/Documentation/Manual/webgl-networking.html
