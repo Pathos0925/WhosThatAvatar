@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private Text AvatarNameMainText;
     private Text AvatarNameSubtitleText;
     private Text StatusText;
+    private Text InformationText;
 
     private InputField AvatarIdInput;
     private Button GetAvatarButton;
@@ -61,6 +62,7 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AvatarNameMainText = GameObject.Find("AvatarNameMainText").GetComponent<Text>();
         AvatarNameSubtitleText = GameObject.Find("AvatarNameSubtitleText").GetComponent<Text>();
         StatusText = GameObject.Find("StatusText").GetComponent<Text>();
+        InformationText = GameObject.Find("InformationText").GetComponent<Text>();
 
         BottomPanel = GameObject.Find("BottomPanel");
         BottomPanel.SetActive(false);
@@ -143,7 +145,7 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
 
     //this doesnt seem to work?
-    private IEnumerator UpdateInputFromQueryString()
+    private IEnumerator UpdateInpasdasdfutFromQueryString()
     {
         yield return null;
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -159,6 +161,10 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 #endif   
     }
     
+    public void SetInformationText(string value)
+    {
+        InformationText.text = value;
+    }
 
     public void SetMainTitle(string avatarNameMainText = null, string avatarNameSubtitleText = null)
     {

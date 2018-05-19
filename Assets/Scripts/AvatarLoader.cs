@@ -1,10 +1,11 @@
-﻿#define TEST_DECOMPRESS //comment this out in build. This is to test the WebGL decompressor.
+﻿//#define TEST_DECOMPRESS //comment this out in build. This is to test the WebGL decompressor.
 //#define TEST_LOAD_ON_START
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -18,6 +19,8 @@ public class AvatarLoader : MonoBehaviour
     private MouseOrbitImproved mouseOrbit;
     bool abort = false;
     private byte[] buff;
+    private int filesize = 0;
+    private int decompressedSize = 0;
 
     private bool CheckedQuerstring = false;
 
@@ -117,7 +120,7 @@ public class AvatarLoader : MonoBehaviour
         }  
     }
 
-    public void LoadAvatar(string avatarID)
+    public void LoadAvatar(string avatarID, string worldId = "")
     {
         //todo: Disable ui?
         //todo: cancel button
@@ -137,12 +140,15 @@ public class AvatarLoader : MonoBehaviour
                 {
                     StartCoroutine(InstantiateAvatar(() =>
                     {
+                        StartCoroutine(GetInformation(avatarInfo, instantiatedAvatar));
                         UIManager.instance.SetMainTitle(avatarInfo.name, "By: " + avatarInfo.authorName);
                         UIManager.instance.SetLoadedAvatarId(avatarInfo.id);
 
                         GameObject mouseOrbitFollow = new GameObject("MouseOrbitFollow");
                         //mouseOrbitFollow.transform.position = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
-                        mouseOrbitFollow.transform.position = Vector3.zero;
+                        var boundsCenter = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
+
+                        mouseOrbitFollow.transform.position = new Vector3(0f, boundsCenter.y, 0f);
 
                         mouseOrbit.target = mouseOrbitFollow.transform;
                         if (avatarInfo.name == null)
@@ -150,19 +156,36 @@ public class AvatarLoader : MonoBehaviour
                         if (avatarInfo.authorName == null)
                             avatarInfo.authorName = "?";
 
+                        StartCoroutine(ResetAvatarPosition());
                         WebpageUtilities.SetURLParameters(avatarInfo.id);
+                        if (!string.IsNullOrEmpty(worldId))
+                        {
+                            Debug.Log("Getting world info...");
+                            StartCoroutine(VRCAPIHandler.GetWorldInfo(worldId, (info) =>
+                            {
+                                Debug.Log("From world " + info.name);
+                                //avatarInfo.authorName += "\r\n" + "From world: " + info.name;
+                                UIManager.instance.SetMainTitle(avatarInfo.name, "By: " + avatarInfo.authorName + "\r\n" + "From world: " + info.name);
+                            }));
+                        }
                         //todo: enable UI
                     }));
                 }));
             }, (error) =>
             {
-                UIManager.instance.SetMainTitle(null, "Could not find that avatar");
+                UIManager.instance.SetMainTitle(null, "Error");
             }));
         }
         catch(Exception e)
         {
             Debug.Log(e.ToString());
         }
+    }
+
+    private IEnumerator ResetAvatarPosition()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        instantiatedAvatar.transform.position = Vector3.zero;
     }
 
     private IEnumerator GetWebData(string url, Action<byte[]> response)
@@ -254,6 +277,7 @@ public class AvatarLoader : MonoBehaviour
 
                 if (data.Length >= 200)
                 {
+                    filesize = data.Length;
                     Debug.Log("Decompressing, client may hang...");
                     yield return new WaitForEndOfFrame();
 
@@ -273,6 +297,7 @@ public class AvatarLoader : MonoBehaviour
                     {
                         yield return new WaitForEndOfFrame();
                     }
+                    data = null;
                     loadedAssetBundle = request.assetBundle;
                     success = true;
                 }
@@ -305,6 +330,7 @@ public class AvatarLoader : MonoBehaviour
     }
     public IEnumerator InstantiateAvatar( Action onInstantiated)
     {
+        Debug.Log("InstantiateAvatar");
         if (loadedAssetBundle == null)
         {
             UIManager.instance.SetMainTitle("Error", "Could not load avatar!");
@@ -339,7 +365,7 @@ public class AvatarLoader : MonoBehaviour
             instantiatedAvatar.transform.position = Vector3.zero;
 
             var bounds = instantiatedAvatar.GetComponentInChildren<Renderer>().bounds.center;
-            instantiatedAvatar.transform.position = new Vector3(bounds.x, instantiatedAvatar.transform.position.y, bounds.z);
+            //instantiatedAvatar.transform.position = new Vector3(bounds.x, instantiatedAvatar.transform.position.y, bounds.z);//negative?
 
             //WebGL has issues with alot of shaders.
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -349,10 +375,12 @@ public class AvatarLoader : MonoBehaviour
             if (instantiatedAvatar.GetComponent<Animator>())
             {
                 instantiatedAvatar.GetComponent<Animator>().runtimeAnimatorController = GameObject.FindObjectOfType<ObjectHolder>().animationController;
+                instantiatedAvatar.GetComponent<Animator>().applyRootMotion = false;
             }
 
             UIManager.instance.SetMainLoadingBarProgress(1f);
             //UIManager.instance.SetStatusText();
+            loadedAssetBundle.Unload(false);
 
             onInstantiated();
         }
@@ -391,5 +419,152 @@ public class AvatarLoader : MonoBehaviour
         public string message;
         public int status_code;
     }
-   
+
+
+    private IEnumerator GetInformation(VRCAPIHandler.AvatarInfo avatarInfo, GameObject avatar)
+    {
+        UIManager.instance.SetInformationText("");//incase error
+
+        yield return new WaitForSeconds(0.1f);
+        
+        string toSet = "<size=18>" + avatarInfo.name + "</size> \r\n <size=15>by:<i> " + avatarInfo.authorName + " </i></size>" + "\r\n";
+        toSet += "Description: " + avatarInfo.description + "\r\n \r\n";
+
+
+        toSet += "FileSize: " + (filesize / 1000000).ToString() + "MB" + "\r\n";
+        toSet += "\r\n";
+
+        toSet += "Meshes: " + getMeshCount(avatar) + "\r\n";
+        toSet += "Tris: " + getTriCount(avatar) + "\r\n";
+        //toSet += "Verts: " + getVertCount(avatar) + "\r\n"; //doesnt seem to be accurate
+        toSet += "\r\n";
+
+        toSet += "Materials: " + getMaterialCount(avatar) + " (" + getMaterialCount(avatar) + " unique)" + "\r\n";
+        toSet += "ParticleSystems: " + getPartcleSystemCount(avatar) + "\r\n";
+        toSet += "Any Max Particles: " + getPartcleMaxParticleCount(avatar) + "\r\n";
+        toSet += "\r\n";
+
+        toSet += "Dynamic Bone Scripts: " + getDynamicBoneCount(avatar) + "\r\n";
+        toSet += "Dynamic Bone Children: " + getDynamicBoneChildCount(avatar) + "\r\n";
+        toSet += "\r\n";
+
+
+        toSet += "Cameras: " + getCameraCount(avatar) + "\r\n";
+        toSet += "Cloths: " + getClothCount(avatar) + "\r\n";
+
+
+        UIManager.instance.SetInformationText(toSet);
+    }
+
+    private List<Mesh> GetAllMeshes(GameObject go)
+    {
+        var skinnedMesh = go.GetComponentsInChildren<SkinnedMeshRenderer>();
+        var meshFilters = go.GetComponentsInChildren<MeshFilter>();
+        Debug.Log(meshFilters.Length + " meshFilters");
+        var meshes = new List<Mesh>();
+
+        foreach (var mesh in skinnedMesh)
+        {
+            meshes.Add(mesh.sharedMesh);
+        }
+        //foreach (var mesh in meshFilters)
+        {
+        //    meshes.Add(mesh.sharedMesh);
+        }
+        //meshes = meshes.Distinct().ToList();
+        return meshes;
+    }
+    private string getMeshCount(GameObject go)
+    {        
+        return GetAllMeshes(go).Count.ToString();
+    }
+    private string getTriCount(GameObject go)
+    {        
+        int triCount = 0;
+        foreach (var mesh in GetAllMeshes(go))
+        {
+            triCount += mesh.triangles.Length;
+        }
+        return triCount.ToString();
+    }
+    private string getVertCount(GameObject go)
+    {        
+
+        int vertCount = 0;
+        foreach (var mesh in GetAllMeshes(go))
+        {
+            vertCount += mesh.vertexCount;
+        }
+        return vertCount.ToString() + "?";
+    }
+
+    private string getMaterialCount(GameObject go, bool unique = false)
+    {
+        var mats = new List<Material>();
+        var foundObjects = go.GetComponentsInChildren<Renderer>(true);
+        foreach (var individual in foundObjects)
+        {
+            mats.AddRange(individual.materials);
+        }
+        if (unique)
+            mats = mats.Distinct().ToList();
+
+        return mats.Count.ToString();
+    }
+    private string getPartcleSystemCount(GameObject go)
+    {
+        var foundObjects = go.GetComponentsInChildren<ParticleSystem>(true);        
+        return foundObjects.Length.ToString();
+    }
+    private string getPartcleMaxParticleCount(GameObject go)
+    {
+        int maxParticleCount = 0;
+        var foundObjects = go.GetComponentsInChildren<ParticleSystem>(true);
+        foreach(var part in foundObjects)
+        {
+            if (part.maxParticles > maxParticleCount)
+            {
+                maxParticleCount = part.maxParticles;
+            }
+        }
+        if (maxParticleCount >= 10000000)
+        {
+            return "<color=red>" + maxParticleCount.ToString() + "</color>";
+        }
+        else if (maxParticleCount >= 1000000)
+        {
+            return "<color=yellow>" + maxParticleCount.ToString() + "</color>";
+        }
+
+        return maxParticleCount.ToString();
+    }
+    private string getDynamicBoneCount(GameObject go)
+    {
+        var foundObjects = go.GetComponentsInChildren<DynamicBone>(true);
+        return foundObjects.Length.ToString();
+    }
+
+
+    private string getDynamicBoneChildCount(GameObject go)
+    {
+        int childCount = 0;
+        var foundObjects = go.GetComponentsInChildren<DynamicBone>(true);
+        foreach(var db in foundObjects)
+        {
+            if (db.m_Root != null)
+                childCount += db.m_Root.GetComponentsInChildren<Transform>(true).Length;
+        }
+        return childCount.ToString();
+    }
+    private string getCameraCount(GameObject go)
+    {
+        var foundObjects = go.GetComponentsInChildren<Camera>(true);        
+        return foundObjects.Length.ToString();
+    }
+    private string getClothCount(GameObject go)
+    {
+        var foundObjects = go.GetComponentsInChildren<Cloth>(true);
+        return foundObjects.Length.ToString();
+    }
+
 }

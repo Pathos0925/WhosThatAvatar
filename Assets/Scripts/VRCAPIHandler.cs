@@ -1,4 +1,4 @@
-﻿#define TEST_PROXY
+﻿//#define TEST_PROXY
 
 using System;
 using System.Collections;
@@ -69,7 +69,7 @@ public class VRCAPIHandler : MonoBehaviour {
     {
         try
         {
-            var url = CheckProxyUrl(PROXY_API) + "avatars?";
+            var url = CheckProxyUrl(VRCHAT_API) + "avatars?";
             url += "apiKey=" + APIKEY;
             if (!string.IsNullOrEmpty(order))
                 url += "&order=" + order;
@@ -102,6 +102,40 @@ public class VRCAPIHandler : MonoBehaviour {
         finally
         {
 
+        }
+    }
+
+    public static IEnumerator GetWorldInfo(string worldId, Action<WorldInfo> response, Action<string> onError = null)
+    {
+        WorldInfo parsed = null;
+        try
+        {
+            var url = CheckProxyUrl(VRCHAT_API) + "worlds/" + worldId + "?apiKey=" + APIKEY;
+
+            using (UnityWebRequest www = UnityWebRequest.Get(url))
+            {
+                yield return www.Send();
+
+                if (www.isError)
+                {
+                    Debug.Log("Response Error: " + www.error);
+                    if (onError != null)
+                        onError(www.error);
+                }
+                else
+                {
+                    Debug.Log("Response: " + www.downloadHandler.text);
+                    parsed = JsonUtility.FromJson<WorldInfo>(www.downloadHandler.text);
+                    response(parsed);
+                }
+            }
+        }
+        finally
+        {
+            if (parsed == null)
+            {
+                Debug.Log("Couldent parse worldInfo?");
+            }
         }
     }
 
@@ -155,5 +189,15 @@ public class VRCAPIHandler : MonoBehaviour {
         public List<UnityPackage> unityPackages;
         public bool unityPackageUpdated;
         public string unityPackageUrl;
+    }
+
+    [Serializable]
+    public class WorldInfo
+    {
+        public string id;
+        public string name;
+        public string authorName;
+        public string description;
+
     }
 }

@@ -24,6 +24,7 @@ public class SearchManager : MonoBehaviour
     private Button CloseButton;
 
     private RectTransform ResultsContent;
+    private ScrollRect ResultsScrollView;
     private Button NextPageButton;
     private Button PreviousPageButton;
 
@@ -49,6 +50,8 @@ public class SearchManager : MonoBehaviour
 
     private bool caughtReturn = false;
 
+    private bool firstOpen = true;
+
 
     // Use this for initialization
     void Start ()
@@ -60,9 +63,10 @@ public class SearchManager : MonoBehaviour
         SearchCanvas = GameObject.Find("SearchCanvas");
         FindAvatarButton = GameObject.Find("FindAnAvatarButton").GetComponent<Button>();
         FindAvatarButton.onClick.AddListener(() =>
-        {
+        {           
             CloseSearchWindow(true);
         });
+        ResultsScrollView = GameObject.Find("ResultsScrollView").GetComponent<ScrollRect>();
         //BrowseAvatarsButton = GameObject.Find("BrowseAvatarsButton").GetComponent<Button>();
         /* BrowseAvatarsButton.onClick.AddListener(() =>
         {
@@ -216,6 +220,7 @@ public class SearchManager : MonoBehaviour
         {
             loadingObject.gameObject.SetActive(false);
         }
+        ResultsScrollView.verticalScrollbar.value = 1f;
 
         caughtReturn = false;
         ClearResults();
@@ -249,7 +254,7 @@ public class SearchManager : MonoBehaviour
             {
                 Debug.Log("Load button, load avatar: " + avatarId);
                 CloseSearchWindow();
-                AvatarLoader.instance.LoadAvatar(avatarId);
+                AvatarLoader.instance.LoadAvatar(avatarId, locationText.text);
             });
         }
     }
@@ -296,8 +301,14 @@ public class SearchManager : MonoBehaviour
         else
             SearchCanvas.SetActive(false);
 
-        page = 0;
+        //page = 0;
         IsActive = SearchCanvas.activeSelf;
+
+        if (firstOpen && SearchCanvas.activeSelf)
+        {
+            firstOpen = false;
+            OnButtonSearch();
+        }
     }
 
     // Update is called once per frame
