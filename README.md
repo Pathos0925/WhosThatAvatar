@@ -15,11 +15,11 @@ EITHER:
 * Use the scroll wheel to zoom in and out.
 
 ### Find and Browse Avatars
-* Press the "Find and Avatar" Button in the top right.
-* Leave "Cached API" checked to search avatars with the worlds you can find them at. Uncheck to browse all avatars.
+* Clickt he "Find an Avatar" button in the top left corner.
+* Check "Search worlds" to scan indexed public words for avatars. Uncheck to browse all avatars.
 #### Load an avatar from an avatar ID
 Every avatar is identified with a unique ID, which usually starts with avtr_.
-Type or paste this into the search bar at the top.
+Type or paste this into the search bar at the top, or in the url (after ?avater=) if using the web app.
 
 ### Web App Limitation
 The Unity WebGL web application currently has the following restrictions:
