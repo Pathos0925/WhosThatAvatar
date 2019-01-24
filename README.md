@@ -2,6 +2,9 @@
 * Find and view public VRChat avatars.
 * Search public worlds for avatars by name, author, or description. (Experimental)
 
+## WhosThatAvatar no longer works with the latest version of Vrchat and is not being maintained! 
+## WhosThatAvatar no longer works with the latest version of Vrchat and is not being maintained! 
+
 ## How To Use
 EITHER: 
 * Download the source (compatable with Unity 5.6.3p1.) and run it in the Unity editor 
